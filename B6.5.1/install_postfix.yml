@@ -1,0 +1,15 @@
+---
+- name: install && uninstall whith tags postfix
+  hosts: linux_servers
+  gather_facts: no
+  become: yes
+
+  tasks:
+      
+      - name: install postfix
+        tags: i
+        apt: name=postfix state=present
+      
+      - name: uninstall postfix
+        tags: u
+        apt: name=postfix state=absent

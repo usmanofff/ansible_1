@@ -1,0 +1,43 @@
+---
+- name: B6.5.1
+  gather_facts: no
+  hosts: localhost
+  vars:
+    ansible_connection: local
+
+  tasks:
+    - name: Create a 2048-bit SSH key for user1
+      ansible.builtin.user:
+        name: denis
+        generate_ssh_key: yes
+        ssh_key_bits: 2048
+        ssh_key_file: .ssh/id_rsa
+
+    - name: encrypt ssh_key_file
+      ansible.builtin.shell: ansible-vault encrypt ~/.ssh/id_rsa.pub
+
+- name: Add the user and copy id_rsa.pub
+  hosts: linux_servers
+  gather_facts: no
+  become: yes
+
+  tasks:
+    - name: create user1
+      ansible.builtin.user:
+        name: user1
+        shell: /bin/bash
+        groups: sudo
+        append: yes
+
+    - name: Create a directory .ssh
+      ansible.builtin.file:
+        path: /home/user1/.ssh
+        state: directory
+        mode: '0755'  
+
+    
+    - name: Copy id_rsa.pub to remote hosts
+      ansible.builtin.copy:
+        src=~/.ssh/id_rsa.pub
+        dest=/home/user1/.ssh/
+    
