@@ -1,0 +1,7 @@
+---
+- hosts terraform_servers
+  tasks:
+  -name: Download file
+   ansible.builtin.get_url:
+     url: file:/etc/apt/sources.list
+     dest: /home/denis/sources.list
