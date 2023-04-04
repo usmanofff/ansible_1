@@ -1,0 +1,12 @@
+
+---
+- name: Start service mysql
+  hosts: linux_servers
+  become: yes
+
+  tasks:
+   - name: Start service mysql
+     ansible.builtin.service:
+      name: mysql
+      state: started
+    
