@@ -1,0 +1,12 @@
+---
+# tasks file for deploy_ftp
+- name: install and running ftp
+  apt: 
+    name: vsftpd
+    state: latest
+
+- name: Start ftp service
+  service:
+    name: vsftpd
+    state: started
+    enabled: yes
