@@ -1,0 +1,7 @@
+[linux_servers]
+lemp    ansible_host=62.84.118.159
+lamp    ansible_host=130.193.38.164
+
+
+[ubuntu]
+localhost 

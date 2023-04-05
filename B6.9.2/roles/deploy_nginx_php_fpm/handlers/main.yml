@@ -1,0 +1,6 @@
+---
+# handlers file for deploy_nginx_php_fpm
+- name: nginx reload
+  systemd:
+    name: nginx
+    state: reloaded

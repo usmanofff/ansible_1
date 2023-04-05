@@ -1,0 +1,48 @@
+---
+# tasks file for deploy_configure_dnsmasq
+- name: install and running dnsmasq
+  apt: 
+    name: dnsmasq
+    state: latest
+
+- name: system resolved stop
+  service:
+    name: systemd-resolved
+    state: stopped
+    enabled: no
+
+
+- name: Start dnsmasq service
+  service:
+    name: dnsmasq
+    state: started
+    enabled: yes
+
+
+- name: checking working dnsmasq
+  ansible.builtin.shell: sudo rm /etc/resolv.conf | echo "nameserver 8.8.8.8" > /etc/resolv.conf | dig A {{ipaddr}}
+  args:
+    executable: /bin/bash
+  register: output
+
+- name: print result dig A 
+  debug:
+    var: output
+
+- name: copy configure files dnsmasq.conf
+  template:
+    src: dnsmasq.j2
+    dest: /etc/dnsmasq.conf
+    mode: 0555
+  notify:
+      - Restart dnsmasq
+
+- name: copy configure files hosts.conf
+  template:
+    src: hosts.j2
+    dest: /etc/hosts
+    mode: 0555
+  notify:
+      - Restart dnsmasq
+
+      

@@ -1,0 +1,6 @@
+---
+# handlers file for deploy_configure_dnsmasq
+- name: Restart dnsmasq
+  service:
+    name: dnsmasq
+    state: restarted

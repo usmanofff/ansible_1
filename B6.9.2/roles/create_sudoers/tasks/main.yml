@@ -1,0 +1,38 @@
+---
+# tasks file for create_sudoers
+- name: Create group superusers
+  group:
+    name: superusers
+    state: present
+
+- name: Add user1 to group superusers
+  user:
+    name: user1
+    shell: /bin/bash
+    groups: superusers
+    append: yes
+
+- name: Add user2 to group superusers
+  user:
+    name: user2
+    shell: /bin/bash
+    groups: superusers
+    append: yes
+
+- name: Add SSH keys for User1 to remote hosts
+  authorized_key:
+      user: user1 
+      key: "{{ lookup('file', 'id_rsa.pub') }}"
+      state: present
+
+- name: Add SSH keys for User2 to remote hosts
+  authorized_key:
+      user: user2 
+      key: "{{ lookup('file', 'id_rsa.pub') }}"
+      state: present
+
+- name: Copy a new sudoers file into place, after passing validation with visudo
+  template:
+    src: sudoers.j2
+    dest: /etc/sudoers
+    validate: /usr/sbin/visudo -cf %s
