@@ -1,0 +1,25 @@
+---
+# tasks file for php
+- name: Update the apt package index in {{ansible_lsb.description}} server
+  apt:
+    update_cache: yes
+    force_apt_get: yes
+
+- name: Install php-fpm on {{ansible_lsb.description}} server
+  package:
+    name: php-fpm
+    update_cache: yes
+    state: latest
+
+- name: config of php 8.1-fpg, opening 9000 port  
+  template:
+    src: php-conf.j2
+    dest: /etc/php/8.1/fpm/pool.d/www.conf
+  notify:
+  - Restart php8.1-fpm server
+
+- name: php-fpm server restart
+  systemd:
+    name: php8.1-fpm
+    state: restarted
+    enabled: yes

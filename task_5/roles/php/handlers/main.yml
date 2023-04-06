@@ -1,0 +1,6 @@
+---
+# handlers file for php
+- name: Restart php8.1-fpm server
+  ansible.builtin.service:
+    name: php8.1-fpm
+    state: restarted

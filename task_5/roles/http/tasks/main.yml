@@ -1,0 +1,34 @@
+---
+# tasks file for deploy_nginx_server
+- name: Update the apt package index in {{ansible_lsb.description}} server
+  apt:
+    update_cache: yes
+    force_apt_get: yes
+
+- name: Install NGINX web server on {{ansible_lsb.description}} server
+  package:
+    name: nginx
+    update_cache: yes
+    state: present
+
+- name: config of Nginx "sites-availiable"
+  template:
+    src:  nginx-conf.j2
+    dest: /etc/nginx/sites-available/default
+  notify:
+  - nginx reload
+
+- name: This command will create DocumentRoot for site
+  shell:
+    cmd: mkdir -p /opt/nginx/ansible
+
+- name: add index.php file with <?php phpinfo();?> data to /opt/nginx/ansible/index.php
+  template:
+    src: index.j2
+    dest: /opt/nginx/ansible//index.php
+
+- name: Nginx web server restart
+  systemd:
+    name: nginx
+    state: restarted
+    enabled: yes

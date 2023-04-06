@@ -1,0 +1,6 @@
+---
+# handlers file for deploy_nginx_server
+- name: nginx reload
+  systemd:
+    name: nginx
+    state: reloaded
