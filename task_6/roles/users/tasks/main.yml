@@ -1,0 +1,33 @@
+---
+# tasks file for create_user
+- name: Add user1 to remote linux_servers
+  user: 
+      name: user1 
+      home: /home/user1
+      shell: /bin/bash
+
+- name: create group "webwww"
+  
+  group:
+    name: webwww
+    state: present
+
+- name: adding user user1 to new group "webwww"
+  
+  user:
+    name: user1
+    groups: webwww
+    append: yes
+
+- name: Add SSH keys for user1 to remote hosts
+  
+  authorized_key: 
+    user: user1 
+    key: "{{ lookup('file', '~/.ssh/id_rsa.pub') }}"
+
+- name: Adding user user1 to group sudoers
+  
+  lineinfile:
+    dest: /etc/sudoers
+    line: "user1 ALL=(ALL)  NOPASSWD: ALL"
+    validate: 'visudo -cf %s'

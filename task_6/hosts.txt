@@ -1,0 +1,13 @@
+[linux_servers]
+ubuntu_2    ansible_host=178.154.207.88
+ubuntu_1    ansible_host=178.154.206.74
+
+[nginx]
+ubuntu_1    ansible_host=178.154.206.74
+
+[php]
+ubuntu_2    ansible_host=178.154.207.88
+
+
+
+
